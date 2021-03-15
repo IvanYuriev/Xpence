@@ -5,7 +5,7 @@ namespace Scenario.AuthSrv.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1")]
-    public class Ping : ControllerBase
+    public class PingController : ControllerBase
     {
         [HttpGet]
         public string Get()

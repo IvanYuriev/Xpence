@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scenario.AuthSrv.Services;
 using Serilog;
+using Scenario.AuthSrv.Controllers;
 
 namespace Scenario.AuthSrv
 {
@@ -42,6 +43,9 @@ namespace Scenario.AuthSrv
 
             services.AddHealthChecks()
                 .AddCheck("dummy-health-check", () => HealthCheckResult.Healthy("OK!"), tags: new[] { Environment.MachineName });
+
+            //TODO: put it inside config!
+            services.AddHttpClient("mobile", c => c.BaseAddress = new System.Uri("http://localhost:5001"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
