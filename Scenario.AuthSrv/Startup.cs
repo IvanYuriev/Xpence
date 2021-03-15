@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scenario.AuthSrv.Services;
+using Serilog;
 
 namespace Scenario.AuthSrv
 {
@@ -20,6 +22,9 @@ namespace Scenario.AuthSrv
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .CreateLogger();
         }
 
         public IConfiguration Configuration { get; }
@@ -35,7 +40,8 @@ namespace Scenario.AuthSrv
             services.AddAuthentication((string)null)
                 .AddScheme<AuthenticationSchemeOptions, JwtAuthenticationHandler>(JwtAuthenticationHandler.AuthenticationScheme, options => { });
 
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+                .AddCheck("dummy-health-check", () => HealthCheckResult.Healthy("OK!"), tags: new[] { Environment.MachineName });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +61,7 @@ namespace Scenario.AuthSrv
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

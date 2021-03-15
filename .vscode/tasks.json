@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Xpence.csproj",
+                "${workspaceFolder}/Xpence.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -26,12 +26,27 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "watch",
+            "label": "watch-auth",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "watch",
-                "-p ${workspaceFolder}/Scenario.MobileSrv/Scenario.MobileSrv.csproj",
+                "-p",
+                "${workspaceFolder}/Scenario.AuthSrv/Scenario.AuthSrv.csproj",
+                "run",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch-mobilee",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "-p",
+                "${workspaceFolder}/Scenario.MobileSrv/Scenario.MobileSrv.csproj",
                 "run",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"

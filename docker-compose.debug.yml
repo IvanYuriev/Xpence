@@ -9,9 +9,23 @@ services:
       context: .
       dockerfile: Scenario.MobileSrv/Dockerfile
     ports:
-      - 80
+      - 5001
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_URLS=http://+:5000
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    depends_on:
+      - scenarioauthsrv
+  scenarioauthsrv:
+    image: scenarioauthsrv
+    build:
+      context: .
+      dockerfile: Scenario.AuthSrv/Dockerfile
+    ports:
+      - 5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
