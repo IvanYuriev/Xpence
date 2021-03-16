@@ -26,3 +26,13 @@ Additional features:
 * Serilog is used and configured for structured logging
 
 :exclamation: NOTE: code is NOT ready for production use and should be treated as an example.
+
+Things todo (not prioritiesed):
+* clean up dockerfile - reduce its size, check to security issues, public/internal ports
+* apply Polly policies for in/out-going requests - retry, circuit break, timeout logic
+* get rid of Newtonsoft Json to utilize more performant NetCore Json implementation
+* think about protocols used inside (REST, gRPC, smth else)
+* user-secrets and configuration for connection strings, certificates, licenses
+* distributed tracing, telemetry, metrics
+* gracefully shutdown middleware (simple RequestCounter or smth more complicated?)
+* a proper health endpoints for L7 load-balancers and docker-compose
