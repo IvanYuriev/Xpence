@@ -1,5 +1,5 @@
 
-A trivial microservices project written in .NET Core 5, contains 2 services Auth and Mobile. Auth service is the main (enity point) of the project and has an ability to authenticate user with JWT token and pass authenticated requests to Mobile service.
+A trivial microservices project written in .NET Core 5, contains 2 services Auth and Mobile. Auth service is the main (entry point) of the project and has an ability to authenticate user with JWT token and pass authenticated requests to Mobile service.
 Docker compose files are presented to run both services at the same time with:
 
 ```
@@ -36,3 +36,11 @@ Things todo (not prioritiesed):
 * distributed tracing, telemetry, metrics
 * gracefully shutdown middleware (simple RequestCounter or smth more complicated?)
 * a proper health endpoints for L7 load-balancers and docker-compose
+
+Architectural questions:
+* it'd be better to use rev-proxy for security/auth with no need to pass JWT through all the services chain (Ocelot as a posibility)
+* think hard about proper size of each service and it's boundaries (DDD bounded context is a posibility, <2 services only for 3-5 people team)
+* prepare common source code for integration with Queue-based external software
+* service discovery and distributed configs (Consul, ETCD)
+* dev / stage / prod environment differences. How to mock the dependencies?
+* review 12-factor app requirements once more!
