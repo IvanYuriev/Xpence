@@ -1,4 +1,4 @@
-namespace Scenario.MobileSrv.Controllers
+namespace Scenario.MobileSrv.Models
 {
     public class PaymentModel
     {

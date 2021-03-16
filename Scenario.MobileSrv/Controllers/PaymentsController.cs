@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Scenario.MobileSrv.Models;
+using Scenario.MobileSrv.Services;
 
 namespace Scenario.MobileSrv.Controllers
 {
