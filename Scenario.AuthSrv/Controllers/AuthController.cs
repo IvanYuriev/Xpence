@@ -2,8 +2,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
+using Scenario.AuthSrv.Models;
 
 namespace Scenario.AuthSrv.Controllers
 {
@@ -13,10 +15,12 @@ namespace Scenario.AuthSrv.Controllers
     public class AuthController : ControllerBase
     {
         private JwtSecurityTokenHandler _handler;
+        private IConfiguration _configuration;
 
-        public AuthController()
+        public AuthController(IConfiguration configuration)
         {
             _handler = new JwtSecurityTokenHandler();
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -66,7 +70,8 @@ namespace Scenario.AuthSrv.Controllers
 
         private string CreateAccessToken(string clientSub)
         {
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("SECRET_KET_LONG_ENOUGH"));
+            var secret = Encoding.ASCII.GetBytes(_configuration["JwtConfig:Secret"]);
+            var key = new SymmetricSecurityKey(secret);
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             //TODO: should be smth like: new SigningCredentials(new X509SecurityKey(cert), "RS256");
             var header = new JwtHeader(signingCredentials);
@@ -83,6 +88,9 @@ namespace Scenario.AuthSrv.Controllers
                 },
                 {
                     JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()
+                },
+                {
+                    JwtRegisteredClaimNames.Iss, "Xpence"
                 }
             };
             var token = new JwtSecurityToken(header, payload);

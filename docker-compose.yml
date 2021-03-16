@@ -3,10 +3,21 @@
 version: '3.4'
 
 services:
-  scenariomobilesrv:
+  mobileAPI:
     image: scenariomobilesrv
     build:
       context: .
       dockerfile: Scenario.MobileSrv/Dockerfile
     ports:
       - 80
+    depends_on:
+      - auth
+  auth:
+    image: scenarioauthsrv
+    build:
+      context: .
+      dockerfile: Scenario.AuthSrv/Dockerfile
+    ports:
+      - 80
+    environment:
+      - MOBILE_URL=http://mobileAPI:80

@@ -15,6 +15,9 @@ using Microsoft.Extensions.Logging;
 using Scenario.AuthSrv.Services;
 using Scenario.MobileSrv.Controllers;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Scenario.MobileSrv
 {
@@ -35,8 +38,25 @@ namespace Scenario.MobileSrv
         {
             services.AddControllers();
 
-            services.AddAuthentication((string)null)
-                .AddScheme<AuthenticationSchemeOptions, JwtAuthenticationHandler>(JwtAuthenticationHandler.AuthenticationScheme, options => { });
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(jwt => {
+                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+                //TODO: configure it properly with user-secrets and secure validation
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters{
+                    ValidateIssuerSigningKey= true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false, 
+                    ValidateAudience = false,
+                    RequireExpirationTime = false,
+                    ValidateLifetime = true
+                }; 
+            });
+
 
             services.AddHealthChecks()
                 .AddCheck("dummy-health-check", () => HealthCheckResult.Healthy("OK!"), tags: new[] { Environment.MachineName });
@@ -51,6 +71,7 @@ namespace Scenario.MobileSrv
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
 

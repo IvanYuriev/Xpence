@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,7 @@ namespace Scenario.MobileSrv.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = "JWT")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PaymentsController : ControllerBase
     {
         private readonly ILogger<PaymentsController> _logger;

@@ -1,5 +1,8 @@
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Scenario.AuthSrv.Controllers
@@ -7,13 +10,15 @@ namespace Scenario.AuthSrv.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PaymentsController : ControllerBase
     {
         private HttpClient _client;
 
         public PaymentsController(IHttpClientFactory factory)
         {
-            _client = factory.CreateClient("mobile");;
+            //TODO: replace named client with a proper type-safe one!
+            _client = factory.CreateClient("mobile");
         }   
 
         [HttpGet]

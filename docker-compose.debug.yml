@@ -3,29 +3,30 @@
 version: '3.4'
 
 services:
-  scenariomobilesrv:
+  mobileAPI:
     image: scenariomobilesrv
     build:
       context: .
       dockerfile: Scenario.MobileSrv/Dockerfile
     ports:
-      - 5001
+      - "5001:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_URLS=http://+:5001
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
     depends_on:
-      - scenarioauthsrv
-  scenarioauthsrv:
+      - auth
+  auth:
     image: scenarioauthsrv
     build:
       context: .
       dockerfile: Scenario.AuthSrv/Dockerfile
     ports:
-      - 5000
+      - "5000:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5001
+      - ASPNETCORE_URLS=http://+:5000
+      - MOBILE_URL=http://mobileAPI:5001
     volumes:
       - ~/.vsdbg:/remote_debugger:rw

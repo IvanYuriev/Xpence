@@ -1,4 +1,4 @@
-namespace Scenario.AuthSrv.Controllers
+namespace Scenario.AuthSrv.Models
 {
     public class UserCredentials
     {
